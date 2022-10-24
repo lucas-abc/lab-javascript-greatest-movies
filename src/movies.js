@@ -8,7 +8,7 @@ function getAllDirectors(moviesArray) {
 
 // Iteration 2: Steven Spielberg. The best? - How many drama movies did STEVEN SPIELBERG direct?
 function howManyMovies(moviesArray) {
-    const directorMovies = moviesArray.filter(element => element.director === "Steven Spielberg" && element.genre.includes("Drama"));
+    const directorMovies = moviesArray.filter(currentMovie => currentMovie.director === "Steven Spielberg" && currentMovie.genre.includes("Drama"));
     return directorMovies.length;
 }
 
@@ -16,20 +16,56 @@ function howManyMovies(moviesArray) {
 function scoresAverage(moviesArray) {
     if (!moviesArray.length) {
         return 0;
-    } else {
-    const result = moviesArray.reduce((x, y) => {return x + y.score}, 0) / moviesArray.length;
-    return Math.round(result * 100) / 100;
-    } 
+    }
+    const scoredMovies = moviesArray.filter(currentMovie => currentMovie.score);
+    const totalScore = scoredMovies.reduce((previousMovie, currentMovie) => previousMovie + currentMovie.score, 0) / moviesArray.length;
+    return Number(totalScore.toFixed(2));
 }
 
 // Iteration 4: Drama movies - Get the average of Drama Movies
-function dramaMoviesScore(moviesArray) {}
+function dramaMoviesScore(moviesArray) {
+    const dramaMovies = moviesArray.filter(currentMovie => currentMovie.genre.includes("Drama"));
+    return scoresAverage(dramaMovies);
+}
 
 // Iteration 5: Ordering by year - Order by year, ascending (in growing order)
-function orderByYear(moviesArray) {}
+function orderByYear(moviesArray) {
+    const newMoviesArray = [...moviesArray];
+    const orderedMoviesArray = newMoviesArray.sort(function (previousMovie, currentMovie) {
+        if (previousMovie.year !== currentMovie.year) {
+            return previousMovie.year - currentMovie.year;
+        } else {
+            if (previousMovie.title < currentMovie.title) {
+                return -1;
+            }
+            if (previousMovie.title > currentMovie.title) {
+                return 1; 
+            }
+            if (previousMovie.title === currentMovie.title) {
+                return 0;
+            }
+        }
+    })
+    return orderedMoviesArray;
+}
 
 // Iteration 6: Alphabetic Order - Order by title and print the first 20 titles
-function orderAlphabetically(moviesArray) {}
+function orderAlphabetically(moviesArray) {
+    const newMoviesArray = [...moviesArray];
+    const orderedMoviewsArray = newMoviesArray.map(currentMovie => currentMovie.title)
+    const printMoviesArray = orderedMoviewsArray.sort(function (previousMovie, currentMovie) {
+        if (previousMovie < currentMovie) {
+            return -1;
+        }
+        if (previousMovie > currentMovie) {
+            return 1; 
+        }
+        if (previousMovie === currentMovie) {
+            return 0;
+        }
+    })
+    return printMoviesArray.slice(0, 20);
+}
 
 // BONUS - Iteration 7: Time Format - Turn duration of the movies from hours to minutes
 function turnHoursToMinutes(moviesArray) {}
